@@ -1,3 +1,5 @@
 # pong-js
 
-Pong game made with Javascript using HTML canvas.
+Pong game made with Javascript.
+
+Font by [Matt Lagrandeur](http://www.mattlag.com/bitfonts/)
