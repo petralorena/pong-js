@@ -1,0 +1,8 @@
+body {
+    background-color: #000000;
+    cursor: none;
+}
+
+#game {
+    border: 0.5em #adff2f solid;
+}
