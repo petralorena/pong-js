@@ -17,10 +17,17 @@ const PADDLE_WIDTH = 16;
 var playerScore = 0;
 var computerScore = 0;
 
+var lblComputerScore;
+var lblPlayerScore;
+
 window.onload = function(){
     canvas = document.getElementById("game");
     context = canvas.getContext("2d");
-    context.font = "Consolas 20px";
+
+    lblPlayerScore = document.getElementById("playerScore");
+    lblComputerScore = document.getElementById("computerScore");
+    lblPlayerScore.innerHTML = 0;
+    lblComputerScore.innerHTML = 0;
     
     setInterval(function (){
         draw();
@@ -35,13 +42,14 @@ window.onload = function(){
 }
 
 function draw(){
+    // background
     colorRect(0, 0, canvas.width, canvas.height, "black");
+    // ball
     colorRect(ballPosX, ballPosY, BALL_SIZE, BALL_SIZE, "white");
+    // left paddle
     colorRect(0, leftPaddlePosY, PADDLE_WIDTH, PADDLE_HEIGHT, "white");
+    // right paddle
     colorRect(canvas.width-PADDLE_WIDTH, rightPaddlePosY, PADDLE_WIDTH, PADDLE_HEIGHT, "white");
-
-    //context.fillText(playerScore, 100, 100);
-    //context.fillText(computerScore, canvas.width-100, 100);
 }
 
 function move(){
@@ -51,29 +59,36 @@ function move(){
     ballPosY += ballSpeedY;
     
     if(ballPosX > canvas.width){
-        if(ballPosY < rightPaddlePosY || ballPosY > rightPaddlePosY + PADDLE_HEIGHT){
-            playerScore++;
-            resetBall();            
-        }
-        else{
+        if(touchRightPaddle()){
             ballSpeedX = -ballSpeedX;  
-            ballSpeedY = (ballPosY - (rightPaddlePosY + (PADDLE_HEIGHT/2))) * 0.25;
+            ballSpeedY = (ballPosY - (rightPaddlePosY + (PADDLE_HEIGHT/2))) * 0.25;            
+        }
+        else{            
+            lblPlayerScore.innerHTML = playerScore++;
+            resetBall();
         }
     }
     if(ballPosX < 0){
-        if(ballPosY < leftPaddlePosY || ballPosY > leftPaddlePosY + PADDLE_HEIGHT){
-            computerScore++; 
-            resetBall();
-                            
-        }
-        else{
+        if(touchLeftPaddle()){
             ballSpeedX = -ballSpeedX;  
             ballSpeedY = (ballPosY - (leftPaddlePosY + (PADDLE_HEIGHT/2))) * 0.25;
+        }
+        else{
+            lblComputerScore.innerHTML = computerScore++; 
+            resetBall();
         }
     }
     if(ballPosY > canvas.height - BALL_SIZE || ballPosY < 0){
         ballSpeedY = -ballSpeedY;
     }
+}
+
+function touchRightPaddle(){
+    return ballPosY > rightPaddlePosY && ballPosY < (rightPaddlePosY + PADDLE_HEIGHT);
+}
+
+function touchLeftPaddle(){
+    return ballPosY > leftPaddlePosY && ballPosY < (leftPaddlePosY + PADDLE_HEIGHT);
 }
 
 function colorRect(x, y, width, height, color){
@@ -96,6 +111,8 @@ function resetBall(){
     if(playerScore == 5 || computerScore == 5){
         playerScore = 0;
         computerScore = 0;
+        lblPlayerScore.innerHTML = playerScore;        
+        lblComputerScore.innerHTML = computerScore;
     }
     ballSpeedX = -ballSpeedX;
     ballPosX = canvas.width/2 - (BALL_SIZE/2);
@@ -110,3 +127,8 @@ function computerPaddle(){
         rightPaddlePosY -= 10;
     }
 }
+
+function delay(ms){
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+

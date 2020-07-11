@@ -1,8 +1,36 @@
+@font-face {
+    font-family: 'Bit5x3';
+    src: 
+        url('font/Bit5x3.svg#Bit5x3') format('svg'),
+        url('font/Bit5x3.ttf') format('truetype'),
+        url('font/Bit5x3.woff') format('woff'),
+        url('font/bit5x3.eot'),
+        url('font/bit5x3.eot?#iefix') format('embedded-opentype'),
+        url('font/bit5x3.woff2') format('woff2');
+}
+
 body {
     background-color: #000000;
-    cursor: none;
+    cursor: none;    
 }
 
 #game {
-    border: 0.5em #adff2f solid;
+    border: 0.5em ;
+    border-color: #ffffff;
+    border-style: solid none;
+}
+
+.container{
+    padding: 1em;
+    text-align: center;
+}
+
+.scores{
+    height: 5em;
+}
+
+label{
+    color:#ffffff;
+    font-family: 'Bit5x3';
+    font-size: 3em;
 }
