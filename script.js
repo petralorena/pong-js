@@ -53,30 +53,28 @@ function draw(){
 }
 
 function move(){
-    computerPaddle();
+    moveComputerPaddle();
 
     ballPosX += ballSpeedX;
-    ballPosY += ballSpeedY;
-    
-    if(ballPosX > canvas.width){
-        if(touchRightPaddle()){
-            ballSpeedX = -ballSpeedX;  
-            ballSpeedY = (ballPosY - (rightPaddlePosY + (PADDLE_HEIGHT/2))) * 0.25;            
-        }
-        else{            
-            lblPlayerScore.innerHTML = playerScore++;
-            resetBall();
-        }
+    ballPosY += ballSpeedY;    
+
+    if(touchRightPaddle()){
+        ballSpeedX = -ballSpeedX;  
+        ballSpeedY = (ballPosY - (rightPaddlePosY + (PADDLE_HEIGHT/2))) * 0.25;            
     }
-    if(ballPosX < 0){
-        if(touchLeftPaddle()){
-            ballSpeedX = -ballSpeedX;  
-            ballSpeedY = (ballPosY - (leftPaddlePosY + (PADDLE_HEIGHT/2))) * 0.25;
-        }
-        else{
-            lblComputerScore.innerHTML = computerScore++; 
-            resetBall();
-        }
+    else if(ballPosX > canvas.width){     
+        playerScore++;       
+        lblPlayerScore.innerHTML = playerScore;
+        resetBall();
+    }
+    if(touchLeftPaddle()){
+        ballSpeedX = -ballSpeedX;  
+        ballSpeedY = (ballPosY - (leftPaddlePosY + (PADDLE_HEIGHT/2))) * 0.25;
+    }
+    else if (ballPosX < 0){
+        computerScore++;
+        lblComputerScore.innerHTML = computerScore; 
+        resetBall();
     }
     if(ballPosY > canvas.height - BALL_SIZE || ballPosY < 0){
         ballSpeedY = -ballSpeedY;
@@ -84,11 +82,15 @@ function move(){
 }
 
 function touchRightPaddle(){
-    return ballPosY > rightPaddlePosY && ballPosY < (rightPaddlePosY + PADDLE_HEIGHT);
+    return ballPosY >= rightPaddlePosY 
+        && ballPosY <= (rightPaddlePosY + PADDLE_HEIGHT)
+        && ballPosX + BALL_SIZE > canvas.width-PADDLE_WIDTH;
 }
 
 function touchLeftPaddle(){
-    return ballPosY > leftPaddlePosY && ballPosY < (leftPaddlePosY + PADDLE_HEIGHT);
+    return ballPosY >= leftPaddlePosY 
+        && ballPosY <= (leftPaddlePosY + PADDLE_HEIGHT)
+        && ballPosX < PADDLE_WIDTH;
 }
 
 function colorRect(x, y, width, height, color){
@@ -119,7 +121,7 @@ function resetBall(){
     ballPosY = canvas.height/2 - (BALL_SIZE/2);
 }
 
-function computerPaddle(){
+function moveComputerPaddle(){
     if(rightPaddlePosY + (PADDLE_HEIGHT/2) < ballPosY - 50){
         rightPaddlePosY += 10;
     }
@@ -128,7 +130,6 @@ function computerPaddle(){
     }
 }
 
-function delay(ms){
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+
+
 
